@@ -15,9 +15,9 @@ long_description = (
     open('CHANGES.rst').read()
     + '\n')
 
-setup(name='collective.dms.mailcontent',
+setup(name='collective.dms.batchimport',
       version=version,
-      description="Mail content type for document management system",
+      description="Batch import of files into the Documents Management System",
       long_description=long_description,
       classifiers=[
         "Environment :: Web Environment",
