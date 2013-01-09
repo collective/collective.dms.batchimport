@@ -53,11 +53,11 @@ class BatchImporter(BrowserView):
 
         if not settings.fs_root_directory:
             log.warning('settings.fs_root_directory is not defined')
-            return
+            return 'ERROR'
 
         if not os.path.exists(settings.fs_root_directory):
             log.warning('settings.fs_root_directory do not exist')
-            return
+            return 'ERROR'
 
         self.fs_root_directory = settings.fs_root_directory
         if not self.fs_root_directory.endswith('/'):
@@ -70,6 +70,9 @@ class BatchImporter(BrowserView):
         self.code_to_type_mapping = dict()
         for mapping in settings.code_to_type_mapping:
             self.code_to_type_mapping[mapping['code']] = mapping['portal_type']
+
+        nb_imports = 0
+        nb_errors = 0
 
         for basename, dirnames, filenames in os.walk(self.fs_root_directory):
             metadata_filenames = [x for x in filenames if x.endswith('.metadata')]
@@ -89,9 +92,11 @@ class BatchImporter(BrowserView):
                     self.import_one(filepath, foldername, metadata)
                 except BatchImportError as e:
                     log.warning(str(e))
+                    nb_errors += 1
                 else:
                     self.mark_as_processed(metadata_filepath)
                     self.mark_as_processed(filepath)
+                    nb_imports += 1
 
                 other_filenames.remove(imported_filename)
 
@@ -103,11 +108,12 @@ class BatchImporter(BrowserView):
                     self.import_one(filepath, foldername)
                 except BatchImportError as e:
                     log.warning(str(e))
+                    nb_errors += 1
                 else:
                     self.mark_as_processed(filepath)
+                    nb_imports += 1
 
-        # TODO: return the number of files that have been successfully imported.
-        return 'OK'
+        return 'OK (%s imported files, %s unprocessed files)' % (nb_imports, nb_errors)
 
     def mark_as_processed(self, filepath):
         processed_filepath = os.path.join(self.processed_fs_root_directory,
