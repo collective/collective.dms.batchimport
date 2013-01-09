@@ -23,6 +23,10 @@ from . import _
 log = logging.getLogger('collective.dms.batchimport')
 
 
+class BatchImportError(Exception):
+    pass
+
+
 class ICodeTypeMapSchema(Interface):
     code = schema.TextLine(title=_("Code"))
     portal_type = schema.TextLine(title=_("Portal Type"))
@@ -31,6 +35,9 @@ class ICodeTypeMapSchema(Interface):
 class ISettings(Interface):
     fs_root_directory = schema.TextLine(
         title=_("FS Root Directory"))
+
+    processed_fs_root_directory = schema.TextLine(
+        title=_("FS Root Directory for processed files"))
 
     code_to_type_mapping = schema.List(
         title=_("Code to Portal Type Mapping"),
@@ -52,35 +59,62 @@ class BatchImporter(BrowserView):
             log.warning('settings.fs_root_directory do not exist')
             return
 
+        self.fs_root_directory = settings.fs_root_directory
+        if not self.fs_root_directory.endswith('/'):
+            self.fs_root_directory = self.fs_root_directory + '/'
+
+        self.processed_fs_root_directory = settings.processed_fs_root_directory
+        if not self.processed_fs_root_directory.endswith('/'):
+            self.processed_fs_root_directory = self.processed_fs_root_directory + '/'
+
         self.code_to_type_mapping = dict()
         for mapping in settings.code_to_type_mapping:
             self.code_to_type_mapping[mapping['code']] = mapping['portal_type']
 
-        for basename, dirnames, filenames in os.walk(settings.fs_root_directory):
+        for basename, dirnames, filenames in os.walk(self.fs_root_directory):
             metadata_filenames = [x for x in filenames if x.endswith('.metadata')]
             other_filenames = [x for x in filenames if not x.endswith('.metadata')]
 
             # first pass, handle metadata files
             for filename in metadata_filenames:
-                filepath = os.path.join(basename, filename)
-                foldername = basename[len(settings.fs_root_directory):]
+                metadata_filepath = os.path.join(basename, filename)
+                foldername = basename[len(self.fs_root_directory):]
 
-                metadata = json.load(file(filepath))
+                metadata = json.load(file(metadata_filepath))
 
                 imported_filename = os.path.splitext(filename)[0]
                 filepath = os.path.join(basename, imported_filename)
 
-                self.import_one(filepath, foldername, metadata)
+                try:
+                    self.import_one(filepath, foldername, metadata)
+                except BatchImportError as e:
+                    log.warning(str(e))
+                else:
+                    self.mark_as_processed(metadata_filepath)
+                    self.mark_as_processed(filepath)
+
                 other_filenames.remove(imported_filename)
 
             # second pass, handle other files, creating individual documents
             for filename in other_filenames:
                 filepath = os.path.join(basename, filename)
-                foldername = basename[len(settings.fs_root_directory):]
-                self.import_one(filepath, foldername)
+                foldername = basename[len(self.fs_root_directory):]
+                try:
+                    self.import_one(filepath, foldername)
+                except BatchImportError as e:
+                    log.warning(str(e))
+                else:
+                    self.mark_as_processed(filepath)
 
         # TODO: return the number of files that have been successfully imported.
         return 'OK'
+
+    def mark_as_processed(self, filepath):
+        processed_filepath = os.path.join(self.processed_fs_root_directory,
+                        filepath[len(self.fs_root_directory):])
+        if not os.path.exists(os.path.dirname(processed_filepath)):
+            os.makedirs(os.path.dirname(processed_filepath))
+        os.rename(filepath, processed_filepath)
 
     def get_folder(self, foldername):
         folder = getToolByName(self.context, 'portal_url').getPortalObject()
@@ -95,19 +129,16 @@ class BatchImporter(BrowserView):
         try:
             folder = self.get_folder(foldername)
         except AttributeError:
-            log.warning("the directory on the filesystem doesn't match a plone folder")
-            return
+            raise BatchImportError("filesystem directory doesn't match a plone folder")
         code = filename.split('-', 1)[0]
         portal_type = self.code_to_type_mapping.get(code)
         if not portal_type:
-            log.warning("no portal type associated to this code")
-            return
+            raise BatchImportError('no portal type associated to this code')
 
         document_id = os.path.splitext(filename)[0]
 
         if hasattr(folder, document_id):
-            log.warning("document already exists")
-            return
+            raise BatchImportError('document already exists')
 
         if not metadata:
             metadata = {}
