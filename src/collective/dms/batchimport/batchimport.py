@@ -1,5 +1,6 @@
 import os
 import logging
+import json
 
 from zope.interface import Interface
 from zope import schema
@@ -57,9 +58,23 @@ class BatchImporter(BrowserView):
 
         for basename, dirnames, filenames in os.walk(settings.fs_root_directory):
             # first pass, handle metadata files (TODO)
+            metadata_filenames = [x for x in filenames if x.endswith('.metadata')]
+            other_filenames = [x for x in filenames if not x.endswith('.metadata')]
+
+            for filename in metadata_filenames:
+                filepath = os.path.join(basename, filename)
+                foldername = basename[len(settings.fs_root_directory):]
+
+                metadata = json.load(file(filepath))
+
+                imported_filename = os.path.splitext(filename)[0]
+                filepath = os.path.join(basename, imported_filename)
+
+                self.import_one(filepath, foldername, metadata)
+                other_filenames.remove(imported_filename)
 
             # second pass, handle other files, creating individual documents
-            for filename in filenames:
+            for filename in other_filenames:
                 filepath = os.path.join(basename, filename)
                 foldername = basename[len(settings.fs_root_directory):]
                 self.import_one(filepath, foldername)
@@ -75,7 +90,7 @@ class BatchImporter(BrowserView):
             folder = getattr(folder, part)
         return folder
 
-    def import_one(self, filepath, foldername):
+    def import_one(self, filepath, foldername, metadata=None):
         filename = os.path.basename(filepath)
         try:
             folder = self.get_folder(foldername)
@@ -88,18 +103,24 @@ class BatchImporter(BrowserView):
             log.warning("no portal type associated to this code")
             return
 
-        plone_utils = getToolByName(self.context, 'plone_utils')
+        document_id = os.path.splitext(filename)[0]
 
-        # TODO: give the document an appropriate title
-        document_title = os.path.splitext(filename)[0]
-
-        document_id = plone_utils.normalizeString(document_title)
         if hasattr(folder, document_id):
             log.warning("document already exists")
             return
 
+        if not metadata:
+            metadata = {}
+
+        if 'title' in metadata:
+            document_title = metadata.get('title')
+            del metadata['title']
+        else:
+            document_title = os.path.splitext(filename)[0].split('-', 1)[1]
+
         log.info("creating the document for real (%s)" % document_id)
-        folder.invokeFactory(portal_type, id=document_id, title=document_title)
+        folder.invokeFactory(portal_type, id=document_id, title=document_title,
+                        **metadata)
 
         document = folder[document_id]
 
