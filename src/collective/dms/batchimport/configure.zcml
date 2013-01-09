@@ -17,6 +17,11 @@
     permission="cmf.ManagePortal"
     />
 
+  <browser:resource
+      name="batchimport.png"
+      image="upload_folder_icon.png"
+      />
+
   <browser:page
     name="batchimport-controlpanel"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
