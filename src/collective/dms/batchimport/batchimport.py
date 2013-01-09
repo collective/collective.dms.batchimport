@@ -150,7 +150,7 @@ class BatchImporter(BrowserView):
         try:
             folder = self.get_folder(foldername)
         except AttributeError:
-            raise BatchImportError("filesystem directory '%s' doesn't match a plone folder"%foldername)
+            raise BatchImportError('directory structure mismatch')
         code = filename.split('-', 1)[0]
         portal_type = self.code_to_type_mapping.get(code)
         if not portal_type:
