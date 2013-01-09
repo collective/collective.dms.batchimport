@@ -95,7 +95,8 @@ class BatchImporter(BrowserView):
                 try:
                     self.import_one(filepath, foldername, metadata)
                 except BatchImportError as e:
-                    log.warning(str(e))
+                    log.warning('error importing %s (%s)' % (
+                                            os.path.join(foldername, filename), str(e)))
                     nb_errors += 1
                 else:
                     self.mark_as_processed(metadata_filepath)
@@ -111,7 +112,8 @@ class BatchImporter(BrowserView):
                 try:
                     self.import_one(filepath, foldername)
                 except BatchImportError as e:
-                    log.warning(str(e))
+                    log.warning('error importing %s (%s)' % (
+                                    os.path.join(foldername, filename), str(e)))
                     nb_errors += 1
                 else:
                     self.mark_as_processed(filepath)
