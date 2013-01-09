@@ -4,7 +4,7 @@ from zope import schema
 from Products.Five.browser import BrowserView
 
 from plone.autoform.directives import widget
-from collective.Z3cform.datagridfield import DataGridFieldFactory, DictRow
+from collective.z3cform.datagridfield import DataGridFieldFactory, DictRow
 
 
 from . import _
