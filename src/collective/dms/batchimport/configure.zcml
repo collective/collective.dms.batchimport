@@ -21,7 +21,6 @@
     name="batchimport-controlpanel"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     class=".batchimport.ControlPanel"
-    template="controlpanel.pt"
     permission="cmf.ManagePortal"
     />
 

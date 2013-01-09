@@ -7,6 +7,8 @@ from plone.autoform.directives import widget
 from collective.z3cform.datagridfield import DataGridFieldFactory
 from collective.z3cform.datagridfield.registry import DictRow
 
+from plone.app.registry.browser import controlpanel
+
 
 from . import _
 
@@ -28,6 +30,13 @@ class ISettings(Interface):
 class BatchImporter(BrowserView):
     pass
 
-class ControlPanel(BrowserView):
-    pass
+
+class ControlPanelEditForm(controlpanel.RegistryEditForm):
+    schema = ISettings
+    label = _(u'Batch Import Settings')
+    description = u''
+
+
+class ControlPanel(controlpanel.ControlPanelFormWrapper):
+    form = ControlPanelEditForm
 
