@@ -7,6 +7,7 @@
     i18n_domain="collective.dms.batchimport">
 
   <include package="five.grok" />
+  <include package="collective.z3cform.datagridfield" />
 
   <grok:grok package="." />
 

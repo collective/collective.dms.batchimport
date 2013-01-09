@@ -42,7 +42,7 @@ setup(name='collective.dms.batchimport',
       install_requires=[
           'setuptools',
           'collective.dms.basecontent',
-#          'plone.app.relationfield',
+          'collective.z3cform.datagridfield',
           'five.grok',
       ],
       extras_require={
