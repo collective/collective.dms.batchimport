@@ -57,10 +57,10 @@ class BatchImporter(BrowserView):
             self.code_to_type_mapping[mapping['code']] = mapping['portal_type']
 
         for basename, dirnames, filenames in os.walk(settings.fs_root_directory):
-            # first pass, handle metadata files (TODO)
             metadata_filenames = [x for x in filenames if x.endswith('.metadata')]
             other_filenames = [x for x in filenames if not x.endswith('.metadata')]
 
+            # first pass, handle metadata files
             for filename in metadata_filenames:
                 filepath = os.path.join(basename, filename)
                 foldername = basename[len(settings.fs_root_directory):]
