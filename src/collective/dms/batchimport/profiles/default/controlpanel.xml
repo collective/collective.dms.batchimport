@@ -9,7 +9,7 @@
         title="Batch Import"
         action_id="collective.dms.batchimport"
         appId="collective.dms.batchimport"
-        category="Plone"
+        category="Products"
         condition_expr=""
         url_expr="string:${portal_url}/@@batchimport-controlpanel"
         icon_expr="string:${portal_url}/++resource++batchimport.png"
