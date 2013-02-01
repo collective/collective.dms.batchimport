@@ -75,8 +75,10 @@ class BatchImporter(BrowserView):
         nb_errors = 0
 
         for basename, dirnames, filenames in os.walk(self.fs_root_directory):
+            # avoid folders beginning with .
+            if os.path.basename(basename).startswith('.'): continue
             metadata_filenames = [x for x in filenames if x.endswith('.metadata')]
-            other_filenames = [x for x in filenames if not x.endswith('.metadata')]
+            other_filenames = [x for x in filenames if not x.endswith('.metadata') and not x.startswith('.')]
 
             # first pass, handle metadata files
             for filename in metadata_filenames:
@@ -135,11 +137,11 @@ class BatchImporter(BrowserView):
         try:
             folder = self.get_folder(foldername)
         except AttributeError:
-            raise BatchImportError("filesystem directory doesn't match a plone folder")
+            raise BatchImportError("filesystem directory '%s' doesn't match a plone folder"%foldername)
         code = filename.split('-', 1)[0]
         portal_type = self.code_to_type_mapping.get(code)
         if not portal_type:
-            raise BatchImportError('no portal type associated to this code')
+            raise BatchImportError("no portal type associated to this code '%s'"%code)
 
         document_id = os.path.splitext(filename)[0]
 
