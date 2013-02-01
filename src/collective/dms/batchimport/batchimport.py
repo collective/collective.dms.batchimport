@@ -118,6 +118,8 @@ class BatchImporter(BrowserView):
         return 'OK (%s imported files, %s unprocessed files)' % (nb_imports, nb_errors)
 
     def mark_as_processed(self, filepath):
+        # if the processed folder is the same as the input folder, we dont move files
+        if self.processed_fs_root_directory == self.fs_root_directory: return
         processed_filepath = os.path.join(self.processed_fs_root_directory,
                         filepath[len(self.fs_root_directory):])
         if not os.path.exists(os.path.dirname(processed_filepath)):
