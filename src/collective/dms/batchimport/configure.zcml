@@ -8,6 +8,7 @@
 
   <include package="five.grok" />
   <include package="collective.z3cform.datagridfield" />
+  <include package="collective.dms.mailcontent" />
 
   <grok:grok package="." />
 

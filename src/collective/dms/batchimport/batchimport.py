@@ -16,9 +16,9 @@ from plone.registry.interfaces import IRegistry
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from collective.z3cform.datagridfield import DataGridFieldFactory
 from collective.z3cform.datagridfield.registry import DictRow
+from collective.dms.mailcontent.dmsmail import internalReferenceIncomingMailDefaultValue, receptionDateDefaultValue
 
 from plone.app.registry.browser import controlpanel
-
 
 from . import _
 
@@ -167,6 +167,10 @@ class BatchImporter(BrowserView):
             del metadata['title']
         else:
             document_title = os.path.splitext(filename)[0].split('-', 1)[1]
+
+        if portal_type == 'dmsincomingmail':
+            metadata['internal_reference_no'] = internalReferenceIncomingMailDefaultValue(self)
+            metadata['reception_date'] = receptionDateDefaultValue(self)
 
         log.info("creating the document for real (%s)" % document_id)
         folder.invokeFactory(portal_type, id=document_id, title=document_title,
