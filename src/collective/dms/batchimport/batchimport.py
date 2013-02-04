@@ -5,6 +5,7 @@ import json
 from zope.interface import Interface
 from zope import schema
 from zope import component
+from zope.component import queryUtility
 
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
@@ -12,6 +13,7 @@ from Products.Five.browser import BrowserView
 from plone.autoform.directives import widget
 from plone.namedfile.file import NamedBlobFile
 from plone.registry.interfaces import IRegistry
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from collective.z3cform.datagridfield import DataGridFieldFactory
 from collective.z3cform.datagridfield.registry import DictRow
 
@@ -134,6 +136,13 @@ class BatchImporter(BrowserView):
             folder = getattr(folder, part)
         return folder
 
+    def convertTitleToId(self, title):
+        """Plug into plone's id-from-title machinery.
+        """
+        #title = title.decode('utf-8') 
+        newid = queryUtility(IIDNormalizer).normalize(title)
+        return newid
+
     def import_one(self, filepath, foldername, metadata=None):
         filename = os.path.basename(filepath)
         try:
@@ -145,7 +154,7 @@ class BatchImporter(BrowserView):
         if not portal_type:
             raise BatchImportError("no portal type associated to this code '%s'"%code)
 
-        document_id = os.path.splitext(filename)[0]
+        document_id = self.convertTitleToId(os.path.splitext(filename)[0])
 
         if hasattr(folder, document_id):
             raise BatchImportError('document already exists')
