@@ -9,6 +9,7 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.CMFCore.utils import getToolByName
 
 import z3c.form.button
+from plone import api
 from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 
@@ -53,7 +54,7 @@ class ImportFileForm(form.SchemaForm):
     def convertTitleToId(self, title):
         """Plug into plone's id-from-title machinery.
         """
-        #title = title.decode('utf-8') 
+        #title = title.decode('utf-8')
         newid = queryUtility(IIDNormalizer).normalize(title)
         return newid
 
@@ -82,14 +83,13 @@ class ImportFileForm(form.SchemaForm):
             metadata['reception_date'] = receptionDateDefaultValue(self)
 
         log.info('creating the document for real (%s)' % document_id)
-        folder.invokeFactory(portal_type, id=document_id, title=document_title,
-                        **metadata)
-
-        document = folder[document_id]
-        document.invokeFactory('dmsmainfile', id='main', title=_(u'Main File'), file=data['file'])
-
-        mt = getToolByName(self.context, 'portal_membership')
-        member = mt.getMemberById(owner)
-        document.setCreators([owner])
-        document.manage_setLocalRoles(owner, ['Owner', 'Editor'])
-        document.reindexObjectSecurity()
+        with api.env.adopt_user(username=owner):
+            document_id = folder.invokeFactory(portal_type,
+                                               id=document_id,
+                                               title=document_title,
+                                               **metadata)
+            document = folder[document_id]
+            document.invokeFactory('dmsmainfile',
+                                   id='main',
+                                   title=_(u'Main File'),
+                                   file=data['file'])
