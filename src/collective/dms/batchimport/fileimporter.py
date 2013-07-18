@@ -3,6 +3,8 @@ import os
 import os.path
 
 from zope import schema
+from plone.dexterity.utils import createContentInContainer
+
 from zope.component import queryUtility
 from five import grok
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -82,14 +84,12 @@ class ImportFileForm(form.SchemaForm):
             metadata['internal_reference_no'] = internalReferenceIncomingMailDefaultValue(self)
             metadata['reception_date'] = receptionDateDefaultValue(self)
 
-        log.info('creating the document for real (%s)' % document_id)
+        log.info('creating the document for real (%s)' % document_title)
         with api.env.adopt_user(username=owner):
-            document_id = folder.invokeFactory(portal_type,
-                                               id=document_id,
-                                               title=document_title,
-                                               **metadata)
-            document = folder[document_id]
-            document.invokeFactory('dmsmainfile',
-                                   id='main',
-                                   title=_(u'Main File'),
-                                   file=data['file'])
+            document = createContentInContainer(folder, portal_type,
+                    title=document_title, **metadata)
+            log.info('document has been created (id: %s)' % document.id)
+
+            version = createContentInContainer(document, 'dmsmainfile',
+                    title=_('Scanned Mail'),
+                    file=data['file'])
