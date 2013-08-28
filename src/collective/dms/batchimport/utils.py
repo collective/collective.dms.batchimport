@@ -5,6 +5,7 @@ from plone import api
 from plone.dexterity.utils import createContentInContainer
 
 from collective.dms.mailcontent.dmsmail import internalReferenceIncomingMailDefaultValue, receptionDateDefaultValue
+from pfwbged.basecontent.behaviors import IDeadline, deadlineDefaultValue
 
 from . import _
 
@@ -34,6 +35,9 @@ def createDocument(context, folder, portal_type, document_id, filename,
         document = createContentInContainer(folder, portal_type,
                 title=document_title, **metadata)
         log.info('document has been created (id: %s)' % document.id)
+
+        if IDeadline.providedBy(document):
+            document.deadline = deadlineDefaultValue(None)
 
         version = createContentInContainer(document, 'dmsmainfile',
                 title=_('Scanned Mail'),
