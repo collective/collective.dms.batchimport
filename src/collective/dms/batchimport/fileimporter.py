@@ -3,7 +3,6 @@ import os
 import os.path
 
 from zope import schema
-from plone.dexterity.utils import createContentInContainer
 
 from zope.component import queryUtility
 from five import grok
@@ -15,11 +14,10 @@ from plone import api
 from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 
-from collective.dms.mailcontent.dmsmail import internalReferenceIncomingMailDefaultValue, receptionDateDefaultValue
-
 from plone.namedfile.field import NamedFile, NamedBlobFile
 
 from . import _
+from . import utils
 
 log = logging.getLogger('collective.dms.batchimport')
 
@@ -73,23 +71,7 @@ class ImportFileForm(form.SchemaForm):
         owner = data['owner']
         folder = self.get_folder(data['location'])
 
-        metadata = {}
         document_id = self.convertTitleToId(os.path.splitext(filename)[0])
-        if data.get('title'):
-            document_title = data.get('title')
-        else:
-            document_title = document_id
 
-        if portal_type == 'dmsincomingmail':
-            metadata['internal_reference_no'] = internalReferenceIncomingMailDefaultValue(self)
-            metadata['reception_date'] = receptionDateDefaultValue(self)
-
-        log.info('creating the document for real (%s)' % document_title)
-        with api.env.adopt_user(username=owner):
-            document = createContentInContainer(folder, portal_type,
-                    title=document_title, **metadata)
-            log.info('document has been created (id: %s)' % document.id)
-
-            version = createContentInContainer(document, 'dmsmainfile',
-                    title=_('Scanned Mail'),
-                    file=data['file'])
+        utils.createDocument(self, folder, portal_type, document_id,
+                filename, data['file'], owner)

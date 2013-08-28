@@ -21,6 +21,7 @@ from collective.dms.mailcontent.dmsmail import internalReferenceIncomingMailDefa
 from plone.app.registry.browser import controlpanel
 
 from . import _
+from . import utils
 
 log = logging.getLogger('collective.dms.batchimport')
 
@@ -161,28 +162,9 @@ class BatchImporter(BrowserView):
         if hasattr(folder, document_id):
             raise BatchImportError('document already exists')
 
-        if not metadata:
-            metadata = {}
-
-        if 'title' in metadata:
-            document_title = metadata.get('title')
-            del metadata['title']
-        else:
-            document_title = os.path.splitext(filename)[0].split('-', 1)[1]
-
-        if portal_type == 'dmsincomingmail':
-            metadata['internal_reference_no'] = internalReferenceIncomingMailDefaultValue(self)
-            metadata['reception_date'] = receptionDateDefaultValue(self)
-
-        log.info("creating the document for real (%s)" % document_id)
-        folder.invokeFactory(portal_type, id=document_id, title=document_title,
-                        **metadata)
-
-        document = folder[document_id]
-
         document_file = NamedBlobFile(file(filepath).read(), filename=unicode(filename))
-        document.invokeFactory('dmsmainfile', id='main', title=_(u'Main File'),
-                        file=document_file)
+        utils.createDocument(self, folder, portal_type, document_id,
+                filename, document_file, metadata=metadata)
 
 
 class ControlPanelEditForm(controlpanel.RegistryEditForm):
@@ -193,4 +175,3 @@ class ControlPanelEditForm(controlpanel.RegistryEditForm):
 
 class ControlPanel(controlpanel.ControlPanelFormWrapper):
     form = ControlPanelEditForm
-
