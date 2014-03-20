@@ -75,9 +75,13 @@ class BatchImporter(BrowserView):
         nb_imports = 0
         nb_errors = 0
 
+        excluded_dirs = []
         for basename, dirnames, filenames in os.walk(self.fs_root_directory):
             # avoid folders beginning with .
             if os.path.basename(basename).startswith('.'):
+                excluded_dirs.append("%s/" % basename)
+                continue
+            if any(basename.startswith(s) for s in excluded_dirs):
                 continue
             metadata_filenames = [x for x in filenames if x.endswith('.metadata')]
             other_filenames = [x for x in filenames if not x.endswith('.metadata') and not x.startswith('.')]
