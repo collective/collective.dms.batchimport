@@ -16,8 +16,6 @@ from plone.registry.interfaces import IRegistry
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from collective.z3cform.datagridfield import DataGridFieldFactory
 from collective.z3cform.datagridfield.registry import DictRow
-from collective.dms.mailcontent.dmsmail import internalReferenceIncomingMailDefaultValue, receptionDateDefaultValue
-
 from plone.app.registry.browser import controlpanel
 
 from . import _
@@ -46,7 +44,7 @@ class ISettings(Interface):
         title=_("Code to Portal Type Mapping"),
         value_type=DictRow(title=_("Mapping"),
                            schema=ICodeTypeMapSchema)
-        )
+    )
     widget(code_to_type_mapping=DataGridFieldFactory)
 
 
@@ -79,7 +77,8 @@ class BatchImporter(BrowserView):
 
         for basename, dirnames, filenames in os.walk(self.fs_root_directory):
             # avoid folders beginning with .
-            if os.path.basename(basename).startswith('.'): continue
+            if os.path.basename(basename).startswith('.'):
+                continue
             metadata_filenames = [x for x in filenames if x.endswith('.metadata')]
             other_filenames = [x for x in filenames if not x.endswith('.metadata') and not x.startswith('.')]
 
@@ -96,8 +95,8 @@ class BatchImporter(BrowserView):
                 try:
                     self.import_one(filepath, foldername, metadata)
                 except BatchImportError as e:
-                    log.warning('error importing %s (%s)' % (
-                                            os.path.join(foldername, filename), str(e)))
+                    log.warning('error importing %s (%s)' %
+                                (os.path.join(foldername, filename), str(e)))
                     nb_errors += 1
                 else:
                     self.mark_as_processed(metadata_filepath)
@@ -113,8 +112,8 @@ class BatchImporter(BrowserView):
                 try:
                     self.import_one(filepath, foldername)
                 except BatchImportError as e:
-                    log.warning('error importing %s (%s)' % (
-                                    os.path.join(foldername, filename), str(e)))
+                    log.warning('error importing %s (%s)' %
+                                (os.path.join(foldername, filename), str(e)))
                     nb_errors += 1
                 else:
                     self.mark_as_processed(filepath)
@@ -124,9 +123,10 @@ class BatchImporter(BrowserView):
 
     def mark_as_processed(self, filepath):
         # if the processed folder is the same as the input folder, we dont move files
-        if self.processed_fs_root_directory == self.fs_root_directory: return
+        if self.processed_fs_root_directory == self.fs_root_directory:
+            return
         processed_filepath = os.path.join(self.processed_fs_root_directory,
-                        filepath[len(self.fs_root_directory):])
+                                          filepath[len(self.fs_root_directory):])
         if not os.path.exists(os.path.dirname(processed_filepath)):
             os.makedirs(os.path.dirname(processed_filepath))
         os.rename(filepath, processed_filepath)
@@ -142,7 +142,7 @@ class BatchImporter(BrowserView):
     def convertTitleToId(self, title):
         """Plug into plone's id-from-title machinery.
         """
-        #title = title.decode('utf-8') 
+        #title = title.decode('utf-8')
         newid = queryUtility(IIDNormalizer).normalize(title)
         return newid
 
@@ -155,7 +155,7 @@ class BatchImporter(BrowserView):
         code = filename.split('-', 1)[0]
         portal_type = self.code_to_type_mapping.get(code)
         if not portal_type:
-            raise BatchImportError("no portal type associated to this code '%s'"%code)
+            raise BatchImportError("no portal type associated to this code '%s'" % code)
 
         document_id = self.convertTitleToId(os.path.splitext(filename)[0])
 
@@ -164,7 +164,7 @@ class BatchImporter(BrowserView):
 
         document_file = NamedBlobFile(file(filepath).read(), filename=unicode(filename))
         utils.createDocument(self, folder, portal_type, document_id,
-                filename, document_file, metadata=metadata)
+                             filename, document_file, metadata=metadata)
 
 
 class ControlPanelEditForm(controlpanel.RegistryEditForm):
