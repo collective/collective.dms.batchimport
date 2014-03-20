@@ -31,8 +31,10 @@ def createDocument(context, folder, portal_type, document_id, filename,
         document_title = document_id
 
     if portal_type == 'dmsincomingmail':
-        metadata['internal_reference_no'] = internalReferenceIncomingMailDefaultValue(context)
-        metadata['reception_date'] = receptionDateDefaultValue(context)
+        if 'internal_reference_no' not in metadata:
+            metadata['internal_reference_no'] = internalReferenceIncomingMailDefaultValue(context)
+        if 'reception_date' not in metadata:
+            metadata['reception_date'] = receptionDateDefaultValue(context)
 
     log.info('creating the document for real (%s)' % document_title)
     with api.env.adopt_user(username=owner):
