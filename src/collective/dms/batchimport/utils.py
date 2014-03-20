@@ -1,5 +1,4 @@
 import logging
-import os
 
 from plone import api
 from plone.dexterity.utils import createContentInContainer
@@ -17,7 +16,7 @@ log = logging.getLogger('collective.dms.batchimport')
 
 
 def createDocument(context, folder, portal_type, document_id, filename,
-        file_object, owner=None, metadata=None):
+                   file_object, owner=None, metadata=None):
     if owner is None:
         owner = api.user.get_current().id
 
@@ -36,15 +35,17 @@ def createDocument(context, folder, portal_type, document_id, filename,
         if 'reception_date' not in metadata:
             metadata['reception_date'] = receptionDateDefaultValue(context)
 
+    file_title = _('Scanned Mail')
+    if 'file_title' in metadata:
+        file_title = metadata['file_title']
+
     log.info('creating the document for real (%s)' % document_title)
     with api.env.adopt_user(username=owner):
-        document = createContentInContainer(folder, portal_type,
-                title=document_title, **metadata)
+        document = createContentInContainer(folder, portal_type, title=document_title, **metadata)
         log.info('document has been created (id: %s)' % document.id)
 
         if IDeadline and IDeadline.providedBy(document):
             document.deadline = deadlineDefaultValue(None)
 
-        version = createContentInContainer(document, 'dmsmainfile',
-                title=_('Scanned Mail'),
-                file=file_object)
+        version = createContentInContainer(document, 'dmsmainfile', title=file_title,
+                                           file=file_object)
