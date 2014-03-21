@@ -15,7 +15,7 @@ from . import _
 log = logging.getLogger('collective.dms.batchimport')
 
 
-def createDocument(context, folder, portal_type, document_id, filename,
+def createDocument(context, folder, portal_type, title, filename,
                    file_object, owner=None, metadata=None):
     if owner is None:
         owner = api.user.get_current().id
@@ -23,11 +23,8 @@ def createDocument(context, folder, portal_type, document_id, filename,
     if not metadata:
         metadata = {}
 
-    if 'title' in metadata:
-        document_title = metadata.get('title')
-        del metadata['title']
-    else:
-        document_title = document_id
+    if 'title' not in metadata and title:
+        metadata['title'] = title
 
     if portal_type == 'dmsincomingmail':
         if 'internal_reference_no' not in metadata:
@@ -39,9 +36,9 @@ def createDocument(context, folder, portal_type, document_id, filename,
     if 'file_title' in metadata:
         file_title = metadata['file_title']
 
-    log.info('creating the document for real (%s)' % document_title)
+    log.info('creating the document for real')
     with api.env.adopt_user(username=owner):
-        document = createContentInContainer(folder, portal_type, title=document_title, **metadata)
+        document = createContentInContainer(folder, portal_type, **metadata)
         log.info('document has been created (id: %s)' % document.id)
 
         if IDeadline and IDeadline.providedBy(document):
@@ -49,3 +46,4 @@ def createDocument(context, folder, portal_type, document_id, filename,
 
         version = createContentInContainer(document, 'dmsmainfile', title=file_title,
                                            file=file_object)
+        log.info('file document has been created (id: %s)' % version.id)
