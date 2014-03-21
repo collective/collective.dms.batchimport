@@ -15,8 +15,7 @@ from . import _
 log = logging.getLogger('collective.dms.batchimport')
 
 
-def createDocument(context, folder, portal_type, title, filename,
-                   file_object, owner=None, metadata=None):
+def createDocument(context, folder, portal_type, title, file_object, owner=None, metadata=None):
     if owner is None:
         owner = api.user.get_current().id
 

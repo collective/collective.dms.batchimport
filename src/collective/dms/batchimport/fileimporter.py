@@ -74,4 +74,4 @@ class ImportFileForm(form.SchemaForm):
         document_id = self.convertTitleToId(os.path.splitext(filename)[0])
 
         utils.createDocument(self, folder, portal_type, document_id,
-                filename, data['file'], owner)
+                             data['file'], owner)

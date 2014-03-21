@@ -168,7 +168,7 @@ class BatchImporter(BrowserView):
 
         document_file = NamedBlobFile(file(filepath).read(), filename=unicode(filename))
         utils.createDocument(self, folder, portal_type, document_id,
-                             filename, document_file, metadata=metadata)
+                             document_file, metadata=metadata)
 
 
 class ControlPanelEditForm(controlpanel.RegistryEditForm):
