@@ -11,9 +11,13 @@ Changelog
 ----------------
 
 - Remove useless parameter
+  [sgeulette]
 - Don't force title
+  [sgeulette]
 - Skip useless directories
+  [sgeulette]
 - Apply default_value only if necessary
+  [sgeulette]
 - Pep8 corrections
   [sgeulette]
 
