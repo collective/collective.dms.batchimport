@@ -1,11 +1,15 @@
 Changelog
 =========
 
-1.1 (unreleased)
+1.1 (2014-03-24)
 ----------------
 
-- Nothing changed yet.
-
+- Remove useless parameter
+- Don't force title
+- Skip useless directories
+- Apply default_value only if necessary
+- Pep8 corrections
+  [sgeulette]
 
 1.0 (2014-03-20)
 ----------------
