@@ -17,6 +17,8 @@
     title="collective.dms.batchimport: Batch import"
     />
 
+  <i18n:registerTranslations directory="locales" />
+
   <browser:view
     name="batchimport"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
