@@ -12,11 +12,16 @@
 
   <grok:grok package="." />
 
+  <permission
+    id="collective.dms.batchimport.batchimport"
+    title="collective.dms.batchimport: Batch import"
+    />
+
   <browser:view
     name="batchimport"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     class=".batchimport.BatchImporter"
-    permission="cmf.ManagePortal"
+    permission="collective.dms.batchimport.batchimport"
     />
 
   <browser:resource

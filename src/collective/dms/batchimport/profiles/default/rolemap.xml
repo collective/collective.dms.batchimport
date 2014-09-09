@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<rolemap>
+  <roles>
+    <role name="Batch importer"/>
+  </roles>
+  <permissions>
+    <permission name="collective.dms.batchimport: Batch import" acquire="True">
+      <role name="Batch importer"/>
+      <role name="Manager"/>
+      <role name="Site Administrator"/>
+    </permission>
+  </permissions>
+</rolemap>
