@@ -4,7 +4,8 @@ Changelog
 1.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added specific role and permission to call batchimport view
+  [sgeulette]
 
 
 1.1 (2014-03-24)
