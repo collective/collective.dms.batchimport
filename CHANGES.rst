@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2 (unreleased)
+1.2 (2014-10-24)
 ----------------
 
 - Added specific role and permission to call batchimport view
