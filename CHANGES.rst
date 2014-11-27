@@ -1,10 +1,11 @@
 Changelog
 =========
 
-1.3 (unreleased)
-----------------
+1.2.1 (2014-11-27)
+------------------
 
-- Nothing changed yet.
+- Return created objects
+  [sgeulette]
 
 
 1.2 (2014-10-24)
