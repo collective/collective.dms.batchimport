@@ -46,3 +46,4 @@ def createDocument(context, folder, portal_type, title, file_object, owner=None,
         version = createContentInContainer(document, 'dmsmainfile', title=file_title,
                                            file=file_object)
         log.info('file document has been created (id: %s)' % version.id)
+        return (document, version)
