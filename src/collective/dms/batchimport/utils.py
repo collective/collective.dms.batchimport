@@ -34,6 +34,7 @@ def createDocument(context, folder, portal_type, title, file_object, owner=None,
     file_title = _('Scanned Mail')
     if 'file_title' in metadata:
         file_title = metadata['file_title']
+        del metadata['file_title']
 
     log.info('creating the document for real')
     with api.env.adopt_user(username=owner):
