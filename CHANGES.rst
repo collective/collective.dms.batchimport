@@ -11,6 +11,7 @@ Changelog
 ------------------
 
 - Removed a fake attribute present in the dict passed to createContentInContainer.
+  [sgeulette]
 
 
 1.2.1 (2014-11-27)
