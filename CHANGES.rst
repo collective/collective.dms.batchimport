@@ -1,10 +1,16 @@
 Changelog
 =========
 
-1.2.2 (2014-11-28)
+1.2.3 (unreleased)
 ------------------
 
 - Nothing changed yet.
+
+
+1.2.2 (2014-11-28)
+------------------
+
+- Removed a fake attribute present in the dict passed to createContentInContainer.
 
 
 1.2.1 (2014-11-27)
