@@ -36,7 +36,6 @@ def createDocument(context, folder, portal_type, title, file_object, owner=None,
         file_title = metadata['file_title']
         del metadata['file_title']
 
-    log.info('creating the document for real')
     with api.env.adopt_user(username=owner):
         document = createContentInContainer(folder, portal_type, **metadata)
         log.info('document has been created (id: %s)' % document.id)
