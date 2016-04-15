@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.3 (unreleased)
+1.2.3 (2016-04-15)
 ------------------
 
 - Removed useless message.
