@@ -4,8 +4,8 @@ Changelog
 1.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Removed useless message.
+  [sgeulette]
 
 1.2.2 (2014-11-28)
 ------------------
