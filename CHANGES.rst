@@ -4,8 +4,8 @@ Changelog
 1.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Set internal_reference_no if not set.
+  [sgeulette]
 
 1.2.3 (2016-04-15)
 ------------------
