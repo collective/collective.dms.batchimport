@@ -16,7 +16,8 @@ from . import _
 log = logging.getLogger('collective.dms.batchimport')
 
 
-def createDocument(context, folder, portal_type, title, file_object, owner=None, metadata=None):
+def createDocument(context, folder, portal_type, title, file_object, mainfile_type='dmsmainfile', owner=None,
+                   metadata=None):
     if owner is None:
         owner = api.user.get_current().id
 
@@ -47,7 +48,7 @@ def createDocument(context, folder, portal_type, title, file_object, owner=None,
         if IDeadline and IDeadline.providedBy(document):
             document.deadline = deadlineDefaultValue(None)
 
-        version = createContentInContainer(document, 'dmsmainfile', title=file_title,
+        version = createContentInContainer(document, mainfile_type, title=file_title,
                                            file=file_object)
         log.info('file document has been created (id: %s)' % version.id)
         return (document, version)

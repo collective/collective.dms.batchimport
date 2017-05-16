@@ -6,6 +6,8 @@ Changelog
 
 - Set internal_reference_no if not set.
   [sgeulette]
+- Added dmsmainfile portal type parameter at creation.
+  [sgeulette]
 
 1.2.3 (2016-04-15)
 ------------------
