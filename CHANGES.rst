@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.4 (unreleased)
+1.2.4 (2017-05-30)
 ------------------
 
 - Set internal_reference_no if not set.
