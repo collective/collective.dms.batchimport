@@ -4,8 +4,8 @@ Changelog
 1.2.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Test portal type more generically.
+  [sgeulette]
 
 1.2.4 (2017-05-30)
 ------------------

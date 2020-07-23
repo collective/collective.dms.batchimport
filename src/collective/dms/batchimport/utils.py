@@ -27,12 +27,12 @@ def createDocument(context, folder, portal_type, title, file_object, mainfile_ty
     if 'title' not in metadata and title:
         metadata['title'] = title
 
-    if portal_type == 'dmsincomingmail':
+    if portal_type.startswith('dmsincoming'):
         if 'internal_reference_no' not in metadata:
             metadata['internal_reference_no'] = internalReferenceIncomingMailDefaultValue(context)
         if 'reception_date' not in metadata:
             metadata['reception_date'] = receptionDateDefaultValue(context)
-    elif portal_type == 'dmsoutgoingmail':
+    elif portal_type.startswith('dmsoutgoing'):
         if 'internal_reference_no' not in metadata:
             metadata['internal_reference_no'] = internalReferenceOutgoingMailDefaultValue(context)
 
