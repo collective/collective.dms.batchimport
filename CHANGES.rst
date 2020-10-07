@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.5 (unreleased)
+1.2.5 (2020-10-07)
 ------------------
 
 - Test portal type more generically.
