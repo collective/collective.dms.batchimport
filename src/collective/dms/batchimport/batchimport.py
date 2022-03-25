@@ -159,7 +159,7 @@ class BatchImporter(BrowserView):
         code = filename.split('-', 1)[0]
         portal_type = self.code_to_type_mapping.get(code)
         if not portal_type:
-            raise BatchImportError("no portal type associated to this code '%s'" % code)
+            raise BatchImportError(u"no portal type associated to this code '%s'" % code)
 
         document_id = self.convertTitleToId(os.path.splitext(filename)[0])
 

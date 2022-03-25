@@ -4,8 +4,8 @@ Changelog
 1.2.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Corrected UnicodeEncodeError.
+  [sgeulette]
 
 1.2.5 (2020-10-07)
 ------------------
