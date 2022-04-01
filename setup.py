@@ -36,7 +36,7 @@ setup(name='collective.dms.batchimport',
       url='http://svn.plone.org/svn/collective/',
       license='gpl',
       packages=find_packages('src'),
-      package_dir = {'': 'src'},
+      package_dir={'': 'src'},
       namespace_packages=['collective', 'collective.dms'],
       include_package_data=True,
       zip_safe=False,
@@ -45,6 +45,7 @@ setup(name='collective.dms.batchimport',
           'collective.dms.basecontent',
           'collective.dms.mailcontent',
           'collective.z3cform.datagridfield',
+          'imio.pyutils',
           'natsort',
           'five.grok',
       ],
@@ -57,5 +58,7 @@ setup(name='collective.dms.batchimport',
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
       target = plone
+      [console_scripts]
+      batchimport_add_metadata = collective.dms.batchimport.script:add_metadata
       """,
       )

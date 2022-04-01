@@ -5,6 +5,10 @@ Changelog
 ------------------
 
 - Corrected UnicodeEncodeError.
+- Removed prefix from filename
+- Sort filenames naturally
+- Used filename as title if no metadata
+- Added script to add metadata (nothing done for now)
   [sgeulette]
 
 1.2.5 (2020-10-07)
