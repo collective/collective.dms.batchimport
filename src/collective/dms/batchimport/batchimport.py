@@ -151,12 +151,13 @@ class BatchImporter(BrowserView):
         return newid
 
     def import_one(self, filepath, foldername, metadata=None):
-        filename = os.path.basename(filepath)
         try:
             folder = self.get_folder(foldername)
         except AttributeError:
             raise BatchImportError('directory structure mismatch')
-        code = filename.split('-', 1)[0]
+
+        filename = os.path.basename(filepath)
+        code, filename = filename.split('-', 1)
         portal_type = self.code_to_type_mapping.get(code)
         if not portal_type:
             raise BatchImportError(u"no portal type associated to this code '%s'" % code)
