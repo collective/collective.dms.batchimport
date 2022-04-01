@@ -162,7 +162,10 @@ class BatchImporter(BrowserView):
         if not portal_type:
             raise BatchImportError(u"no portal type associated to this code '%s'" % code)
 
-        document_id = self.convertTitleToId(os.path.splitext(filename)[0])
+        title = os.path.splitext(filename)[0]
+        document_id = self.convertTitleToId(title)
+        if metadata is None:
+            metadata = {'title': title}
 
         if hasattr(folder, document_id):
             raise BatchImportError('document already exists')
