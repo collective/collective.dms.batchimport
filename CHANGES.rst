@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.6 (2022-04-01)
+1.3.0 (2022-04-01)
 ------------------
 
 - Corrected UnicodeEncodeError.
