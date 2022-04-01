@@ -1,25 +1,25 @@
-import os
-import logging
-import json
-
-from zope.interface import Interface
-from zope import schema
-from zope import component
-from zope.component import queryUtility
-
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser import BrowserView
-
-from plone.autoform.directives import widget
-from plone.namedfile.file import NamedBlobFile
-from plone.registry.interfaces import IRegistry
-from plone.i18n.normalizer.interfaces import IIDNormalizer
+# -*- coding: utf-8 -*-
+from collective.dms.batchimport import _
+from collective.dms.batchimport import utils
 from collective.z3cform.datagridfield import DataGridFieldFactory
 from collective.z3cform.datagridfield.registry import DictRow
+from natsort import humansorted
 from plone.app.registry.browser import controlpanel
+from plone.autoform.directives import widget
+from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.namedfile.file import NamedBlobFile
+from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
+from zope import component
+from zope import schema
+from zope.component import queryUtility
+from zope.interface import Interface
 
-from . import _
-from . import utils
+import json
+import logging
+import os
+
 
 log = logging.getLogger('collective.dms.batchimport')
 
@@ -87,7 +87,7 @@ class BatchImporter(BrowserView):
             other_filenames = [x for x in filenames if not x.endswith('.metadata') and not x.startswith('.')]
 
             # first pass, handle metadata files
-            for filename in metadata_filenames:
+            for filename in humansorted(metadata_filenames):
                 metadata_filepath = os.path.join(basename, filename)
                 foldername = basename[len(self.fs_root_directory):]
 
@@ -110,7 +110,7 @@ class BatchImporter(BrowserView):
                 other_filenames.remove(imported_filename)
 
             # second pass, handle other files, creating individual documents
-            for filename in other_filenames:
+            for filename in humansorted(other_filenames):
                 filepath = os.path.join(basename, filename)
                 foldername = basename[len(self.fs_root_directory):]
                 try:

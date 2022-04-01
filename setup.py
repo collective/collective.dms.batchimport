@@ -45,6 +45,7 @@ setup(name='collective.dms.batchimport',
           'collective.dms.basecontent',
           'collective.dms.mailcontent',
           'collective.z3cform.datagridfield',
+          'natsort',
           'five.grok',
       ],
       extras_require={
