@@ -1,11 +1,11 @@
 Changelog
 =========
 
-1.3.1 (unreleased)
+1.4.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Raised ValueError if internal_number_no is already used.
+  [sgeulette]
 
 1.3.0 (2022-04-01)
 ------------------
