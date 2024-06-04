@@ -18,4 +18,3 @@ msgstr ""
 #: profiles/default/rolemap.xml
 msgid "Batch importer"
 msgstr "Importateur en lot"
-

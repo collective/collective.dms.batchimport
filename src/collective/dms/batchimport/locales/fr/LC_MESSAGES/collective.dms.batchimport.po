@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2024-06-04 13:23+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ../profiles/default/controlpanel.xml
+#: ../profiles/testing/controlpanel.xml
+msgid "Batch Import"
+msgstr "Importation batch DMS"
+
+#: ../batchimport.py:171
+msgid "Batch Import Settings"
+msgstr "Configuration de l'importation batch DMS"
+
+#: ../batchimport.py:32
+msgid "Code"
+msgstr "Code"
+
+#: ../batchimport.py:42
+msgid "Code to Portal Type Mapping"
+msgstr "Correspondance code/type de contenu"
+
+#: ../batchimport.py:37
+msgid "FS Root Directory"
+msgstr "Dossier racine d'import"
+
+#: ../batchimport.py:39
+msgid "FS Root Directory for processed files"
+msgstr "Dossier racine pour les fichiers traités"
+
+#: ../fileimporter.py:26
+msgid "File"
+msgstr "Fichier"
+
+#: ../fileimporter.py:61
+msgid "Import"
+msgstr "Importation"
+
+#: ../configure.zcml:49
+msgid "Installs the collective.dms.batchimport package"
+msgstr "Installation du package collective.dms.batchimport"
+
+#: ../utils.py:48
+msgid "Internal reference number (${irn}) already exists on type ${type}"
+msgstr "Le numero de reference interne (${irn}) existe deja pour le type ${type}"
+
+#: ../batchimport.py:42
+msgid "Mapping"
+msgstr "Correspondance"
+
+#: ../batchimport.py:33
+msgid "Portal Type"
+msgstr "Type de contenu"
+
+#: ../utils.py:54
+msgid "Scanned Mail"
+msgstr "Document scanné"
+
+#: ../testing.zcml:18
+msgid "Steps to ease tests of collective.dms.batchimport"
+msgstr "Steps pour faciliter les tests de collective.dms.batchimport"
+
+#: ../configure.zcml:49
+msgid "collective.dms.batchimport"
+msgstr "collective.dms.batchimport"
+
+#: ../testing.zcml:18
+msgid "collective.dms.batchimport tests"
+msgstr "collective.dms.batchimport tests"
+
+#. Default: "Batch Import settings"
+#: ../controlpanel.pt:13
+msgid "heading_themis_settings"
+msgstr ""
+
+#. Default: "Up to Site Setup"
+#: ../controlpanel.pt:16
+msgid "label_up_to_plone_setup"
+msgstr ""

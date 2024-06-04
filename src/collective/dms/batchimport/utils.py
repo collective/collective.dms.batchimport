@@ -4,6 +4,7 @@ from collective.dms.mailcontent.dmsmail import receptionDateDefaultValue
 from imio.helpers.content import find
 from plone import api
 from plone.dexterity.utils import createContentInContainer
+from zope.interface import Invalid
 
 import logging
 
@@ -44,10 +45,13 @@ def createDocument(
         if find(
             unrestricted=True, portal_type=portal_type, internal_reference_number=metadata["internal_reference_no"]
         ):
-            raise ValueError(
-                _(
-                    "Internal reference number (${irn}) already exists on type ${type}",
-                    mapping={"irn": metadata["internal_reference_no"], "type": portal_type},
+            raise Invalid(
+                api.portal.translate(
+                    _(
+                        "Internal reference number (${irn}) already exists on type ${type}",
+                        mapping={"irn": metadata["internal_reference_no"], "type": portal_type},
+                    ),
+                    "collective.dms.batchimport",
                 )
             )
 
