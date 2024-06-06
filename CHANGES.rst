@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4.0 (unreleased)
+1.3.1 (2024-06-06)
 ------------------
 
 - Raised ValueError if internal_number_no is already used.
