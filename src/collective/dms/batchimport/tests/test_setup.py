@@ -1,8 +1,7 @@
-import unittest2 as unittest
-
+from collective.dms.batchimport.testing import INTEGRATION
 from Products.CMFCore.utils import getToolByName
 
-from collective.dms.batchimport.testing import INTEGRATION
+import unittest2 as unittest
 
 
 class TestSetup(unittest.TestCase):

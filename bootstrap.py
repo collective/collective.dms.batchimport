@@ -18,8 +18,16 @@ The script accepts buildout command-line options, so you can
 use the -c option to specify an alternate configuration file.
 """
 
-import os, shutil, sys, tempfile, urllib, urllib2, subprocess
 from optparse import OptionParser
+
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+import urllib
+import urllib2
+
 
 if sys.platform == 'win32':
     def quote(c):
@@ -58,6 +66,8 @@ if not has_broken_dash_S and 'site' in sys.modules:
 # loaded by .pth files.
 clean_path = sys.path[:]
 import site  # imported because of its side effects
+
+
 sys.path[:] = clean_path
 for k, v in sys.modules.items():
     if k in ('setuptools', 'pkg_resources') or (
@@ -171,6 +181,7 @@ except ImportError:
     if 'pkg_resources' in sys.modules:
         reload(sys.modules['pkg_resources'])
     import pkg_resources
+
     # This does not (always?) update the default working set.  We will
     # do it.
     for path in sys.path:
@@ -262,6 +273,7 @@ if exitcode != 0:
 ws.add_entry(eggs_dir)
 ws.require(requirement)
 import zc.buildout.buildout
+
 
 # If there isn't already a command in the args, add bootstrap
 if not [a for a in args if '=' not in a]:

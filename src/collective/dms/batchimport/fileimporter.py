@@ -1,23 +1,21 @@
-import logging
-import os
-import os.path
-
-from zope import schema
-
-from zope.component import queryUtility
+from . import _
+from . import utils
 from five import grok
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Products.CMFCore.utils import getToolByName
-
-import z3c.form.button
 from plone import api
 from plone.directives import form
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.namedfile.field import NamedBlobFile
+from plone.namedfile.field import NamedFile
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IPloneSiteRoot
+from zope import schema
+from zope.component import queryUtility
 
-from plone.namedfile.field import NamedFile, NamedBlobFile
+import logging
+import os
+import os.path
+import z3c.form.button
 
-from . import _
-from . import utils
 
 log = logging.getLogger("collective.dms.batchimport")
 
