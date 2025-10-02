@@ -1,16 +1,12 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="collective.dms.batchimport">
 
-  <include package="five.grok" />
   <include package="collective.z3cform.datagridfield" />
   <include package="collective.dms.mailcontent" />
-
-  <grok:grok package="." />
 
   <permission
     id="collective.dms.batchimport.batchimport"
@@ -26,10 +22,12 @@
     permission="collective.dms.batchimport.batchimport"
     />
 
-  <browser:resource
-      name="batchimport.png"
-      image="upload_folder_icon.png"
-      />
+  <browser:view
+    name="fileimport"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".fileimporter.ImportFileForm"
+    permission="cmf.ManagePortal"
+    />
 
   <browser:page
     name="batchimport-controlpanel"
@@ -45,6 +43,14 @@
       title="collective.dms.batchimport"
       directory="profiles/default"
       description="Installs the collective.dms.batchimport package"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="collective.dms.batchimport uninstall"
+      directory="profiles/uninstall"
+      description="Uninstalls the collective.dms.batchimport package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 

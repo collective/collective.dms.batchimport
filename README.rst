@@ -31,9 +31,9 @@ Example files structure:
 Tests
 =====
 
-This add-on is tested using Travis CI. The current status of the add-on is :
+This add-on is tested using Github action. The current status of the add-on is :
 
-.. image:: https://secure.travis-ci.org/collective/collective.dms.batchimport.png
-    :target: http://travis-ci.org/collective/collective.dms.batchimport
-
-
+.. image:: https://github.com/collective/collective.dms.batchimport/actions/workflows/main.yml/badge.svg
+    :target: https://github.com/collective/collective.dms.batchimport/actions/workflows/main.yml
+.. image:: https://coveralls.io/repos/github/collective/collective.dms.batchimport/badge.svg
+    :target: https://coveralls.io/github/collective/collective.dms.batchimport
