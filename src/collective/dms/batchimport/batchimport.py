@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
 from collective.dms.batchimport import _
 from collective.dms.batchimport import utils
-from collective.z3cform.datagridfield import DataGridFieldFactory
+from collective.z3cform.datagridfield.datagridfield import DataGridFieldFactory
 from collective.z3cform.datagridfield.registry import DictRow
 from natsort import humansorted
 from plone.app.registry.browser import controlpanel
 from plone.autoform.directives import widget
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.namedfile.file import NamedBlobFile
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from zope import component
 from zope import schema
 from zope.component import queryUtility
+from zope.interface import alsoProvides
 from zope.interface import Interface
 
 import json
@@ -46,6 +48,7 @@ class ISettings(Interface):
 
 class BatchImporter(BrowserView):
     def __call__(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
         settings = component.getUtility(IRegistry).forInterface(ISettings, False)
 
         if not settings.fs_root_directory:
@@ -85,9 +88,10 @@ class BatchImporter(BrowserView):
             # first pass, handle metadata files
             for filename in humansorted(metadata_filenames):
                 metadata_filepath = os.path.join(basename, filename)
-                foldername = basename[len(self.fs_root_directory) :]
+                foldername = basename[len(self.fs_root_directory):]
 
-                metadata = json.load(file(metadata_filepath))
+                with open(metadata_filepath, "r", encoding="utf-8") as f:
+                    metadata = json.load(f)
 
                 imported_filename = os.path.splitext(filename)[0]
                 filepath = os.path.join(basename, imported_filename)
@@ -107,7 +111,7 @@ class BatchImporter(BrowserView):
             # second pass, handle other files, creating individual documents
             for filename in humansorted(other_filenames):
                 filepath = os.path.join(basename, filename)
-                foldername = basename[len(self.fs_root_directory) :]
+                foldername = basename[len(self.fs_root_directory):]
                 try:
                     self.import_one(filepath, foldername)
                 except BatchImportError as e:
@@ -123,7 +127,7 @@ class BatchImporter(BrowserView):
         # if the processed folder is the same as the input folder, we dont move files
         if self.processed_fs_root_directory == self.fs_root_directory:
             return
-        processed_filepath = os.path.join(self.processed_fs_root_directory, filepath[len(self.fs_root_directory) :])
+        processed_filepath = os.path.join(self.processed_fs_root_directory, filepath[len(self.fs_root_directory):])
         if not os.path.exists(os.path.dirname(processed_filepath)):
             os.makedirs(os.path.dirname(processed_filepath))
         os.rename(filepath, processed_filepath)
@@ -138,7 +142,6 @@ class BatchImporter(BrowserView):
 
     def convertTitleToId(self, title):
         """Plug into plone's id-from-title machinery."""
-        # title = title.decode('utf-8')
         newid = queryUtility(IIDNormalizer).normalize(title)
         return newid
 
@@ -152,7 +155,7 @@ class BatchImporter(BrowserView):
         code, filename = filename.split("-", 1)
         portal_type = self.code_to_type_mapping.get(code)
         if not portal_type:
-            raise BatchImportError(u"no portal type associated to this code '%s'" % code)
+            raise BatchImportError("no portal type associated to this code '%s'" % code)
 
         title = os.path.splitext(filename)[0]
         document_id = self.convertTitleToId(title)
@@ -162,14 +165,16 @@ class BatchImporter(BrowserView):
         if hasattr(folder, document_id):
             raise BatchImportError("document already exists")
 
-        document_file = NamedBlobFile(file(filepath).read(), filename=unicode(filename))
+        with open(filepath, "rb") as f:
+            data = f.read()
+        document_file = NamedBlobFile(data=data, filename=filename)
         utils.createDocument(self, folder, portal_type, document_id, document_file, metadata=metadata)
 
 
 class ControlPanelEditForm(controlpanel.RegistryEditForm):
     schema = ISettings
-    label = _(u"Batch Import Settings")
-    description = u""
+    label = _("Batch Import Settings")
+    description = ""
 
 
 class ControlPanel(controlpanel.ControlPanelFormWrapper):

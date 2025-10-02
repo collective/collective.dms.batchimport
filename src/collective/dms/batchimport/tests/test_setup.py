@@ -1,7 +1,7 @@
 from collective.dms.batchimport.testing import INTEGRATION
-from Products.CMFCore.utils import getToolByName
+from plone.base.utils import get_installer
 
-import unittest2 as unittest
+import unittest
 
 
 class TestSetup(unittest.TestCase):
@@ -11,12 +11,12 @@ class TestSetup(unittest.TestCase):
     def setUp(self):
         self.app = self.layer["app"]
         self.portal = self.layer["portal"]
-        self.qi_tool = getToolByName(self.portal, "portal_quickinstaller")
+        self.request = self.layer["request"]
+        self.installer = get_installer(self.portal, self.request)
 
-    def test_product_is_installed(self):
-        """Validate that our products GS profile has been run and the product
-        installed
-        """
-        pid = "collective.dms.batchimport"
-        installed = [p["id"] for p in self.qi_tool.listInstalledProducts()]
-        self.assertTrue(pid in installed, "package appears not to have been installed")
+    def test_install(self):
+        self.assertTrue(self.installer.is_product_installed("collective.dms.batchimport"))
+
+    def test_uninstall(self):
+        self.installer.uninstall_product("collective.dms.batchimport")
+        self.assertFalse(self.installer.is_product_installed("collective.dms.batchimport"))
