@@ -25,7 +25,7 @@ def createDocument(
     context, folder, portal_type, title, file_object, mainfile_type="dmsmainfile", owner=None, metadata=None
 ):
     if owner is None:
-        owner = api.user.get_current().id
+        owner = api.user.get_current().getUserName()
 
     if not metadata:
         metadata = {}
@@ -37,7 +37,7 @@ def createDocument(
         if "internal_reference_no" not in metadata:
             metadata["internal_reference_no"] = internalReferenceIncomingMailDefaultValue(context)
         if "reception_date" not in metadata:
-            metadata["reception_date"] = receptionDateDefaultValue(context)
+            metadata["reception_date"] = receptionDateDefaultValue()
     elif portal_type.startswith("dmsoutgoing"):
         if "internal_reference_no" not in metadata:
             metadata["internal_reference_no"] = internalReferenceOutgoingMailDefaultValue(context)

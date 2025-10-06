@@ -12,7 +12,7 @@
         category="Products"
         condition_expr=""
         url_expr="string:${portal_url}/@@batchimport-controlpanel"
-        icon_expr="string:${portal_url}/++resource++batchimport.png"
+        icon_expr="string:box-arrow-in-up"
         visible="True"
         i18n:attributes="title">
           <permission>Manage Portal</permission>

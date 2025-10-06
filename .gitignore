@@ -1,12 +1,15 @@
 *.egg-info
 *.mo
 *.pyc
+pyvenv.cfg
 .installed.cfg
 .mr.developer.cfg
+.plone.versioncheck.tracked.json
 .project
 .pydevproject
 .settings/
 bin/
+lib/
 develop-eggs/
 parts/
 src/*
