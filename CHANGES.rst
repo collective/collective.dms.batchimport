@@ -4,7 +4,8 @@ Changelog
 1.3.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added file_metadata parameter to import_one and createDocument to set mainfile metadata.
+  [chris-adam]
 
 
 1.3.1 (2024-06-06)
