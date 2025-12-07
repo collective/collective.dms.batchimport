@@ -5,7 +5,7 @@ Changelog
 ------------------
 
 - Added file_metadata parameter to import_one and createDocument to set mainfile metadata.
-  [chris-adam]
+  [chris-adam, sgeulette]
 
 
 1.3.1 (2024-06-06)

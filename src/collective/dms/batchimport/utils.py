@@ -66,12 +66,12 @@ def createDocument(
     if not file_metadata:
         file_metadata = {}
     # title
-    if "file_title" in metadata:
-        file_title = metadata["file_title"]
-        del metadata["file_title"]
     if "title" not in file_metadata:
         file_title = _("Scanned Mail")
-    file_metadata["title"] = file_title
+        if "file_title" in metadata:
+            file_title = metadata["file_title"]
+            del metadata["file_title"]
+        file_metadata["title"] = file_title
     # file
     file_metadata["file"] = file_object
 
