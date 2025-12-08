@@ -88,12 +88,17 @@ class BatchImporter(BrowserView):
                 foldername = basename[len(self.fs_root_directory) :]
 
                 metadata = json.load(file(metadata_filepath))
+                file_metadata = {}
+                for md in metadata:
+                    if md.startswith("file_"):
+                        file_metadata[md[5:]] = metadata[md]
+                        del metadata[md]
 
                 imported_filename = os.path.splitext(filename)[0]
                 filepath = os.path.join(basename, imported_filename)
 
                 try:
-                    self.import_one(filepath, foldername, metadata)
+                    self.import_one(filepath, foldername, metadata, file_metadata)
                 except BatchImportError as e:
                     log.warning("error importing %s (%s)" % (os.path.join(foldername, filename), str(e)))
                     nb_errors += 1
@@ -142,7 +147,7 @@ class BatchImporter(BrowserView):
         newid = queryUtility(IIDNormalizer).normalize(title)
         return newid
 
-    def import_one(self, filepath, foldername, metadata=None):
+    def import_one(self, filepath, foldername, metadata=None, file_metadata=None):
         try:
             folder = self.get_folder(foldername)
         except AttributeError:
@@ -163,7 +168,15 @@ class BatchImporter(BrowserView):
             raise BatchImportError("document already exists")
 
         document_file = NamedBlobFile(file(filepath).read(), filename=unicode(filename))
-        utils.createDocument(self, folder, portal_type, document_id, document_file, metadata=metadata)
+        utils.createDocument(
+            self,
+            folder,
+            portal_type,
+            document_id,
+            document_file,
+            metadata=metadata,
+            file_metadata=file_metadata,
+        )
 
 
 class ControlPanelEditForm(controlpanel.RegistryEditForm):
