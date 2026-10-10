@@ -1,23 +1,35 @@
 # -*- coding: utf8 -*-
-
+from collective.dms.basecontent.source import CategoryVocabulary
+from plone import api
+from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
-from plone.app.testing import PloneWithPackageLayer
+from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from zope.globalrequest.local import setLocal
 
 import collective.dms.batchimport
+import transaction
 
 
-class DmsBatchimportLayer(PloneWithPackageLayer):
+class DmsBatchimportLayer(PloneSandboxLayer):
+
+    defaultBases = (PLONE_FIXTURE,)
+
+    def setUpZope(self, app, configurationContext):
+        self.loadZCML(package=collective.dms.batchimport, name="testing.zcml")
+
     def setUpPloneSite(self, portal):
-        self.applyProfile(portal, "collective.dms.batchimport:default")
+        setLocal("request", portal.REQUEST)  # collective.fingerpointing subscribers need a request
+        applyProfile(portal, "collective.dms.batchimport:default")
+        # creating a dmsmainfile (an iconifiedcategory annex) needs a categories config, as in iA.Docs
+        with api.env.adopt_roles(["Manager"]):
+            CategoryVocabulary().create_default_category()
+        transaction.commit()
+        setLocal("request", None)
 
 
-COLLECTIVE_DMS_BATCHIMPORT = DmsBatchimportLayer(
-    zcml_package=collective.dms.batchimport,
-    zcml_filename="testing.zcml",
-    gs_profile_id="collective.dms.batchimport:default",
-    name="COLLECTIVE_DMS_BATCHIMPORT",
-)
+COLLECTIVE_DMS_BATCHIMPORT = DmsBatchimportLayer(name="COLLECTIVE_DMS_BATCHIMPORT")
 
 INTEGRATION = IntegrationTesting(bases=(COLLECTIVE_DMS_BATCHIMPORT,), name="INTEGRATION")
 

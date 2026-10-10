@@ -1,6 +1,5 @@
 [report]
 include =
-    src/collective/*
+    src/collective/dms/batchimport/*
 omit =
-    */test*
-    */upgrades/*
+    */tests/*

@@ -7,6 +7,7 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.namedfile.file import NamedBlobFile
+from Products.Five.browser import BrowserView
 from zope.interface import Invalid
 
 import unittest
@@ -22,6 +23,8 @@ class TestUtils(unittest.TestCase):
         self.request = self.layer["request"]
         setRoles(self.portal, TEST_USER_ID, ["Manager"])
         login(self.portal, TEST_USER_NAME)
+        # callers pass a view: mailcontent's default values read its context and request
+        self.view = BrowserView(self.portal, self.request)
         self.folder = api.content.create(
             container=self.portal, type="Folder", id="folder"
         )
@@ -29,7 +32,7 @@ class TestUtils(unittest.TestCase):
     def test_createDocument(self):
         file_object = NamedBlobFile(data=b"data", filename="data.txt")
         document, version = createDocument(
-            self.portal,
+            self.view,
             self.folder,
             "dmsdocument",
             "My doc",
@@ -39,7 +42,7 @@ class TestUtils(unittest.TestCase):
         self.assertIn(version.id, document.objectIds())
 
         document, version = createDocument(
-            self.portal,
+            self.view,
             self.folder,
             "dmsincomingmail",
             "My doc",
@@ -59,7 +62,7 @@ class TestUtils(unittest.TestCase):
             )
 
         document, version = createDocument(
-            self.portal,
+            self.view,
             self.folder,
             "dmsincomingmail",
             "My mail",
@@ -71,7 +74,7 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(document.internal_reference_no, "in/2")
 
         document, version = createDocument(
-            self.portal,
+            self.view,
             self.folder,
             "dmsoutgoingmail",
             "My sent mail",
@@ -82,7 +85,7 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(version.title, "Scanned Mail")
 
         document, version = createDocument(
-            self.portal,
+            self.view,
             self.folder,
             "dmsoutgoingmail",
             "My sent mail",

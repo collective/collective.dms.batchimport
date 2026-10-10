@@ -45,7 +45,7 @@ def createDocument(
         if "internal_reference_no" not in metadata:
             metadata["internal_reference_no"] = internalReferenceIncomingMailDefaultValue(context)
         if "reception_date" not in metadata:
-            metadata["reception_date"] = receptionDateDefaultValue()
+            metadata["reception_date"] = receptionDateDefaultValue(context)
     elif portal_type.startswith("dmsoutgoing"):
         if "internal_reference_no" not in metadata:
             metadata["internal_reference_no"] = internalReferenceOutgoingMailDefaultValue(context)

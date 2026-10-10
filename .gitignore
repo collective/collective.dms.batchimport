@@ -4,7 +4,11 @@
 pyvenv.cfg
 .installed.cfg
 .mr.developer.cfg
-.plone.versioncheck.tracked.json
+.plone*
+.python-version
+CACHEDIR.TAG
+checkversion*
+include/
 .project
 .pydevproject
 .settings/
