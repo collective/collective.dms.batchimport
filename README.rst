@@ -1,3 +1,8 @@
+.. image:: https://github.com/collective/collective.dms.batchimport/actions/workflows/main.yml/badge.svg
+    :target: https://github.com/collective/collective.dms.batchimport/actions/workflows/main.yml
+.. image:: https://coveralls.io/repos/github/collective/collective.dms.batchimport/badge.svg
+    :target: https://coveralls.io/github/collective/collective.dms.batchimport
+
 .. contents::
 
 This package can read OS directories to find files to import. A metadata file can be
@@ -26,14 +31,3 @@ Example files structure:
 * "folder 1" / "file1.pdf"
 * "folder 1" / "file1.pdf.metadata"
 * "folder 1" / "folder2" / "file2.pdf"
-
-
-Tests
-=====
-
-This add-on is tested using Github action. The current status of the add-on is :
-
-.. image:: https://github.com/collective/collective.dms.batchimport/actions/workflows/main.yml/badge.svg
-    :target: https://github.com/collective/collective.dms.batchimport/actions/workflows/main.yml
-.. image:: https://coveralls.io/repos/github/collective/collective.dms.batchimport/badge.svg
-    :target: https://coveralls.io/github/collective/collective.dms.batchimport

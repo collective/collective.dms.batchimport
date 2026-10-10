@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from collective.dms.batchimport import _
 from collective.dms.batchimport import utils
-from collective.z3cform.datagridfield.datagridfield import DataGridFieldFactory
+from collective.z3cform.datagridfield.datagridfield import DataGridFieldWidgetFactory
 from collective.z3cform.datagridfield.registry import DictRow
 from natsort import humansorted
 from plone.app.registry.browser import controlpanel
@@ -43,7 +43,7 @@ class ISettings(Interface):
     code_to_type_mapping = schema.List(
         title=_("Code to Portal Type Mapping"), value_type=DictRow(title=_("Mapping"), schema=ICodeTypeMapSchema)
     )
-    widget(code_to_type_mapping=DataGridFieldFactory)
+    widget(code_to_type_mapping=DataGridFieldWidgetFactory)
 
 
 class BatchImporter(BrowserView):

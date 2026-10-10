@@ -1,10 +1,11 @@
 Changelog
 =========
 
-1.4.1 (unreleased)
+2.0.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Migrated to Plone 6.2 (Python 3 only, Plone 4 support dropped), based on the work started by @laulaz on `plone6`.
+  [laulaz, chris-adam]
 
 
 1.4.0 (2026-01-15)
