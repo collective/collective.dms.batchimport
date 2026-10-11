@@ -88,7 +88,7 @@ class BatchImporter(BrowserView):
             # first pass, handle metadata files
             for filename in humansorted(metadata_filenames):
                 metadata_filepath = os.path.join(basename, filename)
-                foldername = basename[len(self.fs_root_directory):]
+                foldername = basename[len(self.fs_root_directory) :]
 
                 with open(metadata_filepath, "r", encoding="utf-8") as f:
                     metadata = json.load(f)
@@ -116,7 +116,7 @@ class BatchImporter(BrowserView):
             # second pass, handle other files, creating individual documents
             for filename in humansorted(other_filenames):
                 filepath = os.path.join(basename, filename)
-                foldername = basename[len(self.fs_root_directory):]
+                foldername = basename[len(self.fs_root_directory) :]
                 try:
                     self.import_one(filepath, foldername)
                 except BatchImportError as e:
@@ -132,7 +132,7 @@ class BatchImporter(BrowserView):
         # if the processed folder is the same as the input folder, we dont move files
         if self.processed_fs_root_directory == self.fs_root_directory:
             return
-        processed_filepath = os.path.join(self.processed_fs_root_directory, filepath[len(self.fs_root_directory):])
+        processed_filepath = os.path.join(self.processed_fs_root_directory, filepath[len(self.fs_root_directory) :])
         if not os.path.exists(os.path.dirname(processed_filepath)):
             os.makedirs(os.path.dirname(processed_filepath))
         os.rename(filepath, processed_filepath)

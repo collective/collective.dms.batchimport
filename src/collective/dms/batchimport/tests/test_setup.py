@@ -112,19 +112,19 @@ class TestTranslations(unittest.TestCase):
         return translate(_(msgid, mapping=mapping), target_language="fr")
 
     def test_translations(self):
-        self.assertEqual(self.fr(u"Batch Import"), u"Importation batch DMS")
-        self.assertEqual(self.fr(u"Batch Import Settings"), u"Configuration de l'importation batch DMS")
-        self.assertEqual(self.fr(u"Code to Portal Type Mapping"), u"Correspondance code/type de contenu")
-        self.assertEqual(self.fr(u"FS Root Directory"), u"Dossier racine d'import")
-        self.assertEqual(self.fr(u"FS Root Directory for processed files"), u"Dossier racine pour les fichiers traités")
-        self.assertEqual(self.fr(u"Scanned Mail"), u"Document scanné")
+        self.assertEqual(self.fr("Batch Import"), "Importation batch DMS")
+        self.assertEqual(self.fr("Batch Import Settings"), "Configuration de l'importation batch DMS")
+        self.assertEqual(self.fr("Code to Portal Type Mapping"), "Correspondance code/type de contenu")
+        self.assertEqual(self.fr("FS Root Directory"), "Dossier racine d'import")
+        self.assertEqual(self.fr("FS Root Directory for processed files"), "Dossier racine pour les fichiers traités")
+        self.assertEqual(self.fr("Scanned Mail"), "Document scanné")
         self.assertEqual(
             self.fr(
-                u"Internal reference number (${irn}) already exists on type ${type}",
-                irn=u"in/1",
-                type=u"dmsincomingmail",
+                "Internal reference number (${irn}) already exists on type ${type}",
+                irn="in/1",
+                type="dmsincomingmail",
             ),
-            u"Le numero de reference interne (in/1) existe deja pour le type dmsincomingmail",
+            "Le numero de reference interne (in/1) existe deja pour le type dmsincomingmail",
         )
         # role title, in the plone domain
-        self.assertEqual(translate(u"Batch importer", domain="plone", target_language="fr"), u"Importateur en lot")
+        self.assertEqual(translate("Batch importer", domain="plone", target_language="fr"), "Importateur en lot")
