@@ -1,22 +1,8 @@
-  include *.py
-  include *.rst
-  include *.in
-  include .travis.yml
-  include base.cfg
-  include buildout.cfg
-  include checkouts.cfg
-  include jenkins-base.cfg
-  include jenkins.cfg
-  include sources.cfg
-  include travis.cfg
-  include versions.cfg
-  recursive-include docs *.GPL
-  recursive-include docs *.txt
-  recursive-include src *.png
-  recursive-include src *.po
-  recursive-include src *.pot
-  recursive-include src *.pt
-  recursive-include src *.sh
-  recursive-include src *.txt
-  recursive-include src *.xml
-  recursive-include src *.zcml
+graft src/collective
+graft docs
+include *.cfg *.rst *.in Makefile mx.ini requirements*.txt
+exclude *-mxdev.txt
+exclude .coveragerc
+exclude .installed.cfg
+exclude .mr.developer.cfg
+global-exclude *.pyc

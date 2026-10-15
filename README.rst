@@ -1,3 +1,6 @@
+.. image:: https://github.com/collective/collective.dms.batchimport/actions/workflows/meta.yml/badge.svg?branch=master
+    :target: https://github.com/collective/collective.dms.batchimport/actions/workflows/meta.yml
+
 .. contents::
 
 This package can read OS directories to find files to import. A metadata file can be
@@ -26,14 +29,3 @@ Example files structure:
 * "folder 1" / "file1.pdf"
 * "folder 1" / "file1.pdf.metadata"
 * "folder 1" / "folder2" / "file2.pdf"
-
-
-Tests
-=====
-
-This add-on is tested using Travis CI. The current status of the add-on is :
-
-.. image:: https://secure.travis-ci.org/collective/collective.dms.batchimport.png
-    :target: http://travis-ci.org/collective/collective.dms.batchimport
-
-

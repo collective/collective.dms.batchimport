@@ -1,27 +1,24 @@
 from . import _
 from . import utils
-from five import grok
-from plone import api
-from plone.directives import form
+from plone.autoform.form import AutoExtensibleForm
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.namedfile.field import NamedBlobFile
-from plone.namedfile.field import NamedFile
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces import IPloneSiteRoot
+from z3c.form import form
 from zope import schema
 from zope.component import queryUtility
+from zope.interface import Interface
 
 import logging
 import os
 import os.path
 import z3c.form.button
 
-
 log = logging.getLogger("collective.dms.batchimport")
 
 
-class IImportFileFormSchema(form.Schema):
-    file = NamedBlobFile(title=_(u"File"))
+class IImportFileFormSchema(Interface):
+    file = NamedBlobFile(title=_("File"))
 
     title = schema.Text(required=False)
     portal_type = schema.Text(required=False)
@@ -29,18 +26,9 @@ class IImportFileFormSchema(form.Schema):
     owner = schema.Text(required=False)
 
 
-class ImportFileForm(form.SchemaForm):
+class ImportFileForm(AutoExtensibleForm, form.Form):
     schema = IImportFileFormSchema
-
-    # Permission required to
-    grok.require("cmf.ManagePortal")
-
     ignoreContext = True
-
-    grok.context(IPloneSiteRoot)
-
-    # appear as @@fileimport view
-    grok.name("fileimport")
 
     def get_folder(self, foldername):
         folder = getToolByName(self.context, "portal_url").getPortalObject()
@@ -52,7 +40,6 @@ class ImportFileForm(form.SchemaForm):
 
     def convertTitleToId(self, title):
         """Plug into plone's id-from-title machinery."""
-        # title = title.decode('utf-8')
         newid = queryUtility(IIDNormalizer).normalize(title)
         return newid
 
@@ -71,4 +58,6 @@ class ImportFileForm(form.SchemaForm):
 
         document_id = self.convertTitleToId(os.path.splitext(filename)[0])
 
-        utils.createDocument(self, folder, portal_type, document_id, data["file"], owner)
+        utils.createDocument(
+            self, folder, portal_type, document_id, data["file"], owner
+        )

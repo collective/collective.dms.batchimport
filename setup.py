@@ -1,10 +1,6 @@
-#! -*- coding: utf8 -*-
-
-from setuptools import find_packages
 from setuptools import setup
 
-
-version = "1.4.1.dev0"
+version = "2.0.0.dev0"
 
 long_description = (
     open("README.rst").read() + "\n" + "Contributors\n"
@@ -25,14 +21,19 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Plone",
-        "Framework :: Plone :: 4.2",
-        "Framework :: Plone :: 4.3",
+        "Framework :: Plone :: Addon",
+        "Framework :: Plone :: 6.2",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Software Development :: Libraries :: Python Modules",
-        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     ],
     keywords="Python Zope Plone",
     author="Cedric Messiant",
@@ -42,25 +43,35 @@ setup(
         "Source": "https://github.com/collective/collective.dms.batchimport",
     },
     license="gpl",
-    packages=find_packages("src"),
-    package_dir={"": "src"},
-    namespace_packages=["collective", "collective.dms"],
     include_package_data=True,
     zip_safe=False,
+    python_requires=">=3.10",
     install_requires=[
-        "setuptools",
-        "collective.dms.basecontent",
         "collective.dms.mailcontent",
         "collective.z3cform.datagridfield",
         "imio.helpers",
         "imio.pyutils",
         "natsort",
-        "five.grok",
+        "plone.api",
+        "plone.app.registry",
+        "plone.autoform",
+        "plone.base",
+        "plone.dexterity",
+        "plone.i18n",
+        "plone.namedfile",
+        "plone.protect",
+        "plone.registry",
+        "Products.CMFCore",
+        "z3c.form",
+        "Zope",
     ],
     extras_require={
         "test": [
+            "collective.dms.basecontent",
+            "plone.app.robotframework",
             "plone.app.testing",
-            "ecreall.helpers.testing",
+            "plone.testing",
+            "robotsuite",
         ],
     },
     entry_points="""
