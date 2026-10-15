@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.dms.batchimport.script import add_metadata
 from io import StringIO  # Plone 6: no six
 
@@ -21,7 +20,10 @@ class TestScript(unittest.TestCase):
     def test_add_metadata(self):
         # nothing is done yet: start and end messages only
         out, err = self.run_script("/srv/import")
-        self.assertEqual(out, ">> Start of batchimport_add_metadata\n>> End of batchimport_add_metadata\n")
+        self.assertEqual(
+            out,
+            ">> Start of batchimport_add_metadata\n>> End of batchimport_add_metadata\n",
+        )
         self.assertEqual(err, "")
         # the import directory is required
         with self.assertRaises(SystemExit) as cm:

@@ -1,14 +1,16 @@
-#! -*- coding: utf8 -*-
-
 from setuptools import find_packages
 from setuptools import setup
-
 
 version = "2.0.0.dev0"
 
 long_description = (
     open("README.rst").read() + "\n" + "Contributors\n"
-    "============\n" + "\n" + open("CONTRIBUTORS.rst").read() + "\n" + open("CHANGES.rst").read() + "\n"
+    "============\n"
+    + "\n"
+    + open("CONTRIBUTORS.rst").read()
+    + "\n"
+    + open("CHANGES.rst").read()
+    + "\n"
 )
 
 setup(
@@ -31,6 +33,7 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     keywords="Python Zope Plone",
@@ -47,18 +50,30 @@ setup(
     zip_safe=False,
     python_requires=">=3.10",
     install_requires=[
-        "setuptools",
-        "collective.dms.basecontent",
         "collective.dms.mailcontent",
         "collective.z3cform.datagridfield",
         "imio.helpers",
         "imio.pyutils",
         "natsort",
+        "plone.api",
+        "plone.app.registry",
+        "plone.autoform",
+        "plone.base",
+        "plone.dexterity",
+        "plone.i18n",
+        "plone.namedfile",
+        "plone.protect",
+        "plone.registry",
+        "Products.CMFCore",
+        "z3c.form",
+        "Zope",
     ],
     extras_require={
         "test": [
+            "collective.dms.basecontent",
             "plone.app.robotframework",
             "plone.app.testing",
+            "plone.testing",
             "robotsuite",
         ],
     },

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from AccessControl import Unauthorized
 from collective.dms.batchimport.testing import INTEGRATION
 from io import BytesIO
@@ -13,7 +12,7 @@ from ZPublisher.HTTPRequest import FileUpload
 import unittest
 
 
-class FieldStorage(object):
+class FieldStorage:
     """Uploaded file, as the publisher gives it to FileUpload"""
 
     def __init__(self, data, filename):
@@ -32,17 +31,33 @@ class TestImportFileForm(unittest.TestCase):
         self.request = self.layer["request"]
         setRoles(self.portal, TEST_USER_ID, ["Manager"])
         # createDocument adopts the current user by its id: a user whose login is its id, as in iA.Docs
-        api.user.create(email="siteadmin@example.com", username="siteadmin", password="SiteAdm!n0", roles=["Manager"])
-        api.user.create(email="agent@example.com", username="agent", password="Agent!1234", roles=["Contributor"])
+        api.user.create(
+            email="siteadmin@example.com",
+            username="siteadmin",
+            password="SiteAdm!n0",
+            roles=["Manager"],
+        )
+        api.user.create(
+            email="agent@example.com",
+            username="agent",
+            password="Agent!1234",
+            roles=["Contributor"],
+        )
         login(self.portal, "siteadmin")
-        self.folder = api.content.create(container=self.portal, type="Folder", id="incoming", title="Incoming")
-        api.content.create(container=self.folder, type="Folder", id="2024", title="2024")
+        self.folder = api.content.create(
+            container=self.portal, type="Folder", id="incoming", title="Incoming"
+        )
+        api.content.create(
+            container=self.folder, type="Folder", id="2024", title="2024"
+        )
 
     def submit(self, filename="Letter.pdf", **fields):
         """Submit the import form with this file and these text fields"""
-        values = dict(("form.widgets.%s" % name, value) for name, value in fields.items())
+        values = {"form.widgets.%s" % name: value for name, value in fields.items()}
         if filename:
-            values["form.widgets.file"] = FileUpload(FieldStorage(b"%PDF-1.4 letter", filename))
+            values["form.widgets.file"] = FileUpload(
+                FieldStorage(b"%PDF-1.4 letter", filename)
+            )
         values["form.buttons.import"] = "Import"
         # request.get reads request.other before request.form: the values of a previous submit stay there
         for data in (self.request.form, self.request.other):
@@ -72,23 +87,32 @@ class TestImportFileForm(unittest.TestCase):
         for name in ("file", "title", "portal_type", "location", "owner"):
             self.assertIn('name="form.widgets.%s' % name, html)
         self.assertIn('name="form.buttons.import"', html)
-        self.assertIsNone(queryMultiAdapter((self.folder, self.request), name="fileimport"))
+        self.assertIsNone(
+            queryMultiAdapter((self.folder, self.request), name="fileimport")
+        )
         login(self.portal, "agent")
         self.assertRaises(Unauthorized, self.portal.restrictedTraverse, "@@fileimport")
         logout()
         self.assertRaises(Unauthorized, self.portal.restrictedTraverse, "@@fileimport")
         login(self.portal, "siteadmin")
         # the file is required
-        form = self.submit(filename=None, portal_type="dmsincomingmail", location="incoming")
+        form = self.submit(
+            filename=None, portal_type="dmsincomingmail", location="incoming"
+        )
         self.assertEqual(form.status, form.formErrorsMessage)
         self.assertEqual(self.folder.objectIds(), ["2024"])
         # Plone 4: the owner field is given as main file type (Known issues), the title field is not used
         form = self.submit(
-            portal_type="dmsincomingmail", location="incoming/2024", title="Complaint", owner="dmsmainfile"
+            portal_type="dmsincomingmail",
+            location="incoming/2024",
+            title="Complaint",
+            owner="dmsmainfile",
         )
         self.assertEqual(form.status, "")
         document = self.folder["2024"]["letter"]
-        self.assertEqual((document.portal_type, document.title), ("dmsincomingmail", "letter"))
+        self.assertEqual(
+            (document.portal_type, document.title), ("dmsincomingmail", "letter")
+        )
         self.assertEqual(document.getOwner().getId(), "siteadmin")
         self.assertEqual(document.internal_reference_no, "in/1")
         self.assertEqual(document.objectIds(), ["scanned-mail"])
@@ -98,10 +122,20 @@ class TestImportFileForm(unittest.TestCase):
         self.assertEqual(main_file.file.filename, "Letter.pdf")
         # Plone 4: no location or no owner (no main file type) raise errors (Known issues)
         self.assertRaises(
-            AttributeError, self.submit, filename="Note.pdf", portal_type="dmsdocument", owner="dmsmainfile"
+            AttributeError,
+            self.submit,
+            filename="Note.pdf",
+            portal_type="dmsdocument",
+            owner="dmsmainfile",
         )
         # Plone 6: ValueError (main file type None) instead of ComponentLookupError
-        self.assertRaises(ValueError, self.submit, filename="Note.pdf", portal_type="dmsdocument", location="incoming")
+        self.assertRaises(
+            ValueError,
+            self.submit,
+            filename="Note.pdf",
+            portal_type="dmsdocument",
+            location="incoming",
+        )
 
     @unittest.expectedFailure
     def test_import_file_owner(self):
@@ -120,5 +154,10 @@ class TestImportFileForm(unittest.TestCase):
     @unittest.expectedFailure
     def test_import_file_title(self):
         """The title field is not used: the document title is its id (Known issues)"""
-        self.submit(portal_type="dmsincomingmail", location="incoming", title="Complaint", owner="dmsmainfile")
+        self.submit(
+            portal_type="dmsincomingmail",
+            location="incoming",
+            title="Complaint",
+            owner="dmsmainfile",
+        )
         self.assertEqual(self.folder["letter"].title, "Complaint")

@@ -14,7 +14,6 @@ import os
 import os.path
 import z3c.form.button
 
-
 log = logging.getLogger("collective.dms.batchimport")
 
 
@@ -59,4 +58,6 @@ class ImportFileForm(AutoExtensibleForm, form.Form):
 
         document_id = self.convertTitleToId(os.path.splitext(filename)[0])
 
-        utils.createDocument(self, folder, portal_type, document_id, data["file"], owner)
+        utils.createDocument(
+            self, folder, portal_type, document_id, data["file"], owner
+        )

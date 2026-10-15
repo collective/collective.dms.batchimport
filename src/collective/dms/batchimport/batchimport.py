@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.dms.batchimport import _
 from collective.dms.batchimport import utils
 from collective.z3cform.datagridfield.datagridfield import DataGridFieldWidgetFactory
@@ -22,7 +21,6 @@ import json
 import logging
 import os
 
-
 log = logging.getLogger("collective.dms.batchimport")
 
 
@@ -38,10 +36,13 @@ class ICodeTypeMapSchema(Interface):
 class ISettings(Interface):
     fs_root_directory = schema.TextLine(title=_("FS Root Directory"))
 
-    processed_fs_root_directory = schema.TextLine(title=_("FS Root Directory for processed files"))
+    processed_fs_root_directory = schema.TextLine(
+        title=_("FS Root Directory for processed files")
+    )
 
     code_to_type_mapping = schema.List(
-        title=_("Code to Portal Type Mapping"), value_type=DictRow(title=_("Mapping"), schema=ICodeTypeMapSchema)
+        title=_("Code to Portal Type Mapping"),
+        value_type=DictRow(title=_("Mapping"), schema=ICodeTypeMapSchema),
     )
     widget(code_to_type_mapping=DataGridFieldWidgetFactory)
 
@@ -83,14 +84,18 @@ class BatchImporter(BrowserView):
             if any(basename.startswith(s) for s in excluded_dirs):
                 continue
             metadata_filenames = [x for x in filenames if x.endswith(".metadata")]
-            other_filenames = [x for x in filenames if not x.endswith(".metadata") and not x.startswith(".")]
+            other_filenames = [
+                x
+                for x in filenames
+                if not x.endswith(".metadata") and not x.startswith(".")
+            ]
 
             # first pass, handle metadata files
             for filename in humansorted(metadata_filenames):
                 metadata_filepath = os.path.join(basename, filename)
                 foldername = basename[len(self.fs_root_directory) :]
 
-                with open(metadata_filepath, "r", encoding="utf-8") as f:
+                with open(metadata_filepath, encoding="utf-8") as f:
                     metadata = json.load(f)
                 file_metadata = {}
                 for md in metadata:
@@ -104,7 +109,11 @@ class BatchImporter(BrowserView):
                 try:
                     self.import_one(filepath, foldername, metadata, file_metadata)
                 except BatchImportError as e:
-                    log.warning("error importing %s (%s)" % (os.path.join(foldername, filename), str(e)))
+                    log.warning(
+                        "error importing {} ({})".format(
+                            os.path.join(foldername, filename), str(e)
+                        )
+                    )
                     nb_errors += 1
                 else:
                     self.mark_as_processed(metadata_filepath)
@@ -120,19 +129,27 @@ class BatchImporter(BrowserView):
                 try:
                     self.import_one(filepath, foldername)
                 except BatchImportError as e:
-                    log.warning("error importing %s (%s)" % (os.path.join(foldername, filename), str(e)))
+                    log.warning(
+                        "error importing {} ({})".format(
+                            os.path.join(foldername, filename), str(e)
+                        )
+                    )
                     nb_errors += 1
                 else:
                     self.mark_as_processed(filepath)
                     nb_imports += 1
 
-        return "OK (%s imported files, %s unprocessed files)" % (nb_imports, nb_errors)
+        return "OK ({} imported files, {} unprocessed files)".format(
+            nb_imports, nb_errors
+        )
 
     def mark_as_processed(self, filepath):
         # if the processed folder is the same as the input folder, we dont move files
         if self.processed_fs_root_directory == self.fs_root_directory:
             return
-        processed_filepath = os.path.join(self.processed_fs_root_directory, filepath[len(self.fs_root_directory) :])
+        processed_filepath = os.path.join(
+            self.processed_fs_root_directory, filepath[len(self.fs_root_directory) :]
+        )
         if not os.path.exists(os.path.dirname(processed_filepath)):
             os.makedirs(os.path.dirname(processed_filepath))
         os.rename(filepath, processed_filepath)

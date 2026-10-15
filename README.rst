@@ -1,7 +1,5 @@
-.. image:: https://github.com/collective/collective.dms.batchimport/actions/workflows/main.yml/badge.svg
-    :target: https://github.com/collective/collective.dms.batchimport/actions/workflows/main.yml
-.. image:: https://coveralls.io/repos/github/collective/collective.dms.batchimport/badge.svg
-    :target: https://coveralls.io/github/collective/collective.dms.batchimport
+.. image:: https://github.com/collective/collective.dms.batchimport/actions/workflows/meta.yml/badge.svg?branch=master
+    :target: https://github.com/collective/collective.dms.batchimport/actions/workflows/meta.yml
 
 .. contents::
 

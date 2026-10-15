@@ -1,18 +1,8 @@
-  include *.py
-  include *.rst
-  include *.in
-  include base.cfg
-  include checkouts.cfg
-  include gha.cfg
-  include test-6.2.cfg
-  include requirements-6.2.txt
-  include Makefile
-  recursive-include docs *.GPL
-  recursive-include docs *.txt
-  recursive-include src *.po
-  recursive-include src *.pot
-  recursive-include src *.robot
-  recursive-include src *.sh
-  recursive-include src *.txt
-  recursive-include src *.xml
-  recursive-include src *.zcml
+graft src/collective
+graft docs
+include *.cfg *.rst *.in Makefile mx.ini requirements*.txt
+exclude *-mxdev.txt
+exclude .coveragerc
+exclude .installed.cfg
+exclude .mr.developer.cfg
+global-exclude *.pyc
