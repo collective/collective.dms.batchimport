@@ -8,7 +8,6 @@ from zope.interface import Invalid
 
 import logging
 
-
 try:
     from pfwbged.basecontent.behaviors import deadlineDefaultValue
     from pfwbged.basecontent.behaviors import IDeadline
@@ -16,7 +15,6 @@ except ImportError:
     IDeadline = None
 
 from . import _
-
 
 log = logging.getLogger("collective.dms.batchimport")
 
@@ -33,7 +31,7 @@ def createDocument(
     file_metadata=None,
 ):
     if owner is None:
-        owner = api.user.get_current().id
+        owner = api.user.get_current().getUserName()
 
     if not metadata:
         metadata = {}
@@ -43,21 +41,30 @@ def createDocument(
 
     if portal_type.startswith("dmsincoming"):
         if "internal_reference_no" not in metadata:
-            metadata["internal_reference_no"] = internalReferenceIncomingMailDefaultValue(context)
+            metadata["internal_reference_no"] = (
+                internalReferenceIncomingMailDefaultValue(context)
+            )
         if "reception_date" not in metadata:
             metadata["reception_date"] = receptionDateDefaultValue(context)
     elif portal_type.startswith("dmsoutgoing"):
         if "internal_reference_no" not in metadata:
-            metadata["internal_reference_no"] = internalReferenceOutgoingMailDefaultValue(context)
+            metadata["internal_reference_no"] = (
+                internalReferenceOutgoingMailDefaultValue(context)
+            )
     if "internal_reference_no" in metadata:
         if find(
-            unrestricted=True, portal_type=portal_type, internal_reference_number=metadata["internal_reference_no"]
+            unrestricted=True,
+            portal_type=portal_type,
+            internal_reference_number=metadata["internal_reference_no"],
         ):
             raise Invalid(
                 api.portal.translate(
                     _(
                         "Internal reference number (${irn}) already exists on type ${type}",
-                        mapping={"irn": metadata["internal_reference_no"], "type": portal_type},
+                        mapping={
+                            "irn": metadata["internal_reference_no"],
+                            "type": portal_type,
+                        },
                     ),
                     "collective.dms.batchimport",
                 )
