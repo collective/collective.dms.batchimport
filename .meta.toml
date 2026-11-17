@@ -29,7 +29,12 @@ test_environment_variables = """
     # Playwright (rfbrowser init) does not know ubuntu-latest 26.04 yet
     PLAYWRIGHT_HOST_PLATFORM_OVERRIDE=ubuntu24.04-x64
 """
+# horse-with-no-namespace: the -nspkg.pth files of the released collective.behavior.talcondition,
+# collective.excelexport and collective.quickupload (pkg_resources namespaces) freeze collective.__path__
+# to site-packages at startup, which hides the editable src/collective.dms.batchimport.
 test_deps_additional = """
+    horse-with-no-namespace
+    collective.beaker @ file://{toxinidir}/sources/collective.beaker
     collective.compoundcriterion @ file://{toxinidir}/sources/collective.compoundcriterion
     collective.contact.core @ file://{toxinidir}/sources/collective.contact.core
     collective.dms.basecontent @ file://{toxinidir}/sources/collective.dms.basecontent
